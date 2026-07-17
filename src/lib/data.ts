@@ -5,7 +5,7 @@
 export const site = {
   name: "Pratik Sharma",
   role: "Full Stack Developer",
-  url: "https://pratiksharma.dev", // TODO: replace with your real domain
+  url: "https://portfolio-g7gl.onrender.com", // update when you add a custom domain
   email: "mailpratiksh11@gmail.com",
   phone: "+91 74883 62132",
   location: "Bengaluru, India. Working with clients worldwide, remote",
