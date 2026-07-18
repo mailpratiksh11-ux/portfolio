@@ -97,7 +97,8 @@ export const experience = [
 export const projects = [
   {
     name: "Beacon AI",
-    kind: "Cold-email automation platform",
+    kind: "Email automation platform",
+    ai: true,
     summary: "Multi-tenant SaaS: send personalized campaigns from your own Gmail, with a chat-based AI writing assistant.",
     built: [
       "Google OAuth 2.0 sign-in, data scoped per tenant",
@@ -114,6 +115,7 @@ export const projects = [
   {
     name: "Skills Up",
     kind: "E-learning platform",
+    ai: false,
     summary: "Full-stack e-learning platform with course creation and smooth video streaming.",
     built: [
       "Course creation and management",

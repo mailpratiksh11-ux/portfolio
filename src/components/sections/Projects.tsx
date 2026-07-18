@@ -144,7 +144,17 @@ export function Projects() {
               <Reveal key={p.name}>
                 <article className="grid gap-10 lg:grid-cols-2 lg:gap-14">
                   <div>
-                    <p className="font-mono text-[13px] text-violet-400">{p.kind}</p>
+                    <p className="flex items-center gap-2.5 font-mono text-[13px] text-violet-400">
+                      {p.ai && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-amber-300">
+                          <svg viewBox="0 0 24 24" fill="#FBBF24" aria-hidden="true" className="size-3">
+                            <path d="M9.5 3.5l1.9 5.6 5.6 1.9-5.6 1.9-1.9 5.6-1.9-5.6L2 11l5.6-1.9 1.9-5.6zM18.5 2l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1 1-2.5zm-.5 12l1.1 2.9 2.9 1.1-2.9 1.1-1.1 2.9-1.1-2.9-2.9-1.1 2.9-1.1 1.1-2.9z" />
+                          </svg>
+                          AI
+                        </span>
+                      )}
+                      {p.kind}
+                    </p>
                     <h3 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-50">
                       {p.name}
                     </h3>
