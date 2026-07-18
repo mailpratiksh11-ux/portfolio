@@ -146,8 +146,13 @@ export function Projects() {
                   <div>
                     <p className="flex items-center gap-2.5 font-mono text-[13px] text-violet-400">
                       {p.ai && (
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-amber-300">
-                          <svg viewBox="0 0 24 24" fill="#FBBF24" aria-hidden="true" className="size-3">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-400/15 px-3.5 py-1 text-[13px] font-bold tracking-wide text-amber-300 shadow-[0_0_18px_rgba(251,191,36,0.35)] [text-shadow:0_0_10px_rgba(251,191,36,0.6)]">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="#FBBF24"
+                            aria-hidden="true"
+                            className="size-4 drop-shadow-[0_0_5px_rgba(251,191,36,0.9)]"
+                          >
                             <path d="M9.5 3.5l1.9 5.6 5.6 1.9-5.6 1.9-1.9 5.6-1.9-5.6L2 11l5.6-1.9 1.9-5.6zM18.5 2l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1 1-2.5zm-.5 12l1.1 2.9 2.9 1.1-2.9 1.1-1.1 2.9-1.1-2.9-2.9-1.1 2.9-1.1 1.1-2.9z" />
                           </svg>
                           AI
