@@ -34,8 +34,9 @@ export function TechStack() {
           </div>
 
           <p className="mt-12 font-mono text-[13px] leading-relaxed text-zinc-600">
-            Also: BullMQ · GridFS · Webhooks · OAuth 2.0 · JWT · RBAC · Google APIs · GitLab ·
-            Multi-tenant architecture · Queue-driven design · Microservices
+            Also: Groq API · LLM integration · BullMQ · GridFS · Webhooks · OAuth 2.0 · JWT ·
+            RBAC · Google APIs · GitLab · Multi-tenant architecture · Queue-driven design ·
+            Microservices
           </p>
         </Reveal>
       </div>
