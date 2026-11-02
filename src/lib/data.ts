@@ -11,7 +11,6 @@ export const site = {
   role: "Software Engineer",
   url: "https://heypratikk.com",
   email: "mailpratiksh11@gmail.com",
-  phone: "+91 74883 62132",
   location: "Bengaluru, India",
   github: "https://github.com/mailpratiksh11-ux",
   linkedin: "https://linkedin.com/in/pratik-sharma-bb6462202",
@@ -322,7 +321,11 @@ export const stack = [
   { group: "Queues and messaging", items: ["BullMQ", "Redis", "RabbitMQ"] },
   { group: "Databases", items: ["MongoDB", "Redis", "GridFS"] },
   { group: "Integrations", items: ["Jira", "Azure", "Gmail API", "Google OAuth 2.0"] },
-  { group: "AI and LLM", items: ["LLM integration", "Prompt design", "Groq"] },
+  // The one group that carries gold rather than blue. It is the newest part of
+  // the work and the part people ask about, so it gets the page's only
+  // departure from the accent colour — used once, it reads as emphasis; used
+  // twice it would just be a second brand colour.
+  { group: "AI and LLM", items: ["LLM integration", "Prompt design", "Groq"], tone: "gold" as const },
   { group: "Tools", items: ["Git", "GitLab", "Jira", "Postman", "Docker"] },
 ];
 

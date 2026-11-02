@@ -54,10 +54,12 @@ export function Contact() {
             </li>
             <li>
               <a
-                href={`tel:${site.phone.replace(/\s/g, "")}`}
+                href={site.leetcode}
+                target="_blank"
+                rel="noreferrer noopener"
                 className="text-white/60 underline decoration-white/20 underline-offset-[6px] transition-colors hover:text-white hover:decoration-white/60"
               >
-                {site.phone}
+                LeetCode
               </a>
             </li>
           </ul>

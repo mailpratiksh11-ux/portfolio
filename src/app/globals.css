@@ -9,6 +9,11 @@
   --color-line: #e8eaed;
   --color-accent: #3867e8;
   --color-accent-soft: #eef3ff;
+  /* Reserved for the AI group in the tooling section — the page's only
+     non-blue accent. Deep enough to stay legible on white, which raw gold is
+     not. */
+  --color-gold: #a97a16;
+  --color-gold-soft: #fdf5e3;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-grotesk), var(--font-inter), ui-sans-serif, sans-serif;
@@ -59,6 +64,15 @@ body {
 
 .settle {
   animation: settle 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* The AI group's glow. A ring plus a soft cast, not a blur filter — a filter
+   would also soften the glyph sitting on top of it. Kept low-alpha so it reads
+   as warmth on a white page rather than as a button begging to be pressed. */
+.gold-glow {
+  box-shadow:
+    0 0 0 3px rgba(169, 122, 22, 0.14),
+    0 2px 14px rgba(169, 122, 22, 0.45);
 }
 
 

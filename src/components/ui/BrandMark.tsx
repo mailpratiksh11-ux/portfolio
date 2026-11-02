@@ -36,14 +36,25 @@ function legibleOnWhite(hex: string): string {
  * initial in a tinted tile, which sits at the same size and weight as a logo
  * so the column reads as one list rather than a list with holes in it.
  */
-export function BrandMark({ name, size = 16 }: { name: string; size?: number }) {
+export function BrandMark({
+  name,
+  size = 16,
+  tone,
+}: {
+  name: string;
+  size?: number;
+  tone?: "gold";
+}) {
   const mark = BRAND_MARKS[name];
+  const gold = tone === "gold";
 
   if (!mark) {
     return (
       <span
         aria-hidden
-        className="inline-flex shrink-0 items-center justify-center rounded-[3px] bg-accent-soft font-mono font-medium text-accent"
+        className={`inline-flex shrink-0 items-center justify-center rounded-[3px] font-mono font-medium ${
+          gold ? "gold-glow bg-gold-soft text-gold" : "bg-accent-soft text-accent"
+        }`}
         style={{ width: size, height: size, fontSize: Math.round(size * 0.6) }}
       >
         {name.charAt(0).toUpperCase()}
@@ -59,8 +70,8 @@ export function BrandMark({ name, size = 16 }: { name: string; size?: number }) 
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      className="shrink-0"
-      style={{ fill: legibleOnWhite(mark.hex) }}
+      className={`shrink-0 ${gold ? "gold-glow rounded-[3px]" : ""}`}
+      style={{ fill: gold ? "var(--color-gold)" : legibleOnWhite(mark.hex) }}
     >
       <path d={mark.path} />
     </svg>
