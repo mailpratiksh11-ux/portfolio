@@ -27,6 +27,31 @@ export const nav = [
   { label: "Contact", href: "#contact" },
 ];
 
+/**
+ * The three lines directly under the hero.
+ *
+ * Deliberately terse — one clause each. `highlights` below covers the same
+ * ground in paragraphs, so if these grow into descriptions the page says the
+ * same thing twice before a reader has scrolled once.
+ */
+export const focus = [
+  {
+    n: "01",
+    title: "Full-stack engineering",
+    desc: "Building complete applications and product experiences.",
+  },
+  {
+    n: "02",
+    title: "Backend systems",
+    desc: "Designing APIs, integrations and reliable application workflows.",
+  },
+  {
+    n: "03",
+    title: "AI-powered applications",
+    desc: "Integrating modern AI capabilities into practical products.",
+  },
+];
+
 /** Four areas of engineering experience, each backed by shipped work. */
 export const highlights = [
   {

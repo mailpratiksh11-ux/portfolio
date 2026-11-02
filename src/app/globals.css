@@ -61,22 +61,6 @@ body {
   animation: settle 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Hero queue schematic. --w is set per row; `both` means a reduced-motion
-   visitor, whose duration is collapsed to almost nothing below, still ends at
-   the final width instead of looking at an empty diagram. */
-@keyframes queue-fill {
-  from {
-    width: 0;
-  }
-  to {
-    width: var(--w);
-  }
-}
-
-.queue-fill {
-  width: var(--w);
-  animation: queue-fill 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
 
 @media (prefers-reduced-motion: reduce) {
   *,
