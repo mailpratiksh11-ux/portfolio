@@ -48,13 +48,30 @@ export function BrandMark({
   const mark = BRAND_MARKS[name];
   const gold = tone === "gold";
 
+  // Nothing in the AI group has a brand mark, and three gold letter tiles say
+  // less than one shared glyph. The sparkle marks the whole group as one idea.
+  if (gold) {
+    return (
+      <svg
+        aria-hidden
+        focusable="false"
+        role="presentation"
+        viewBox="0 0 24 24"
+        width={size + 2}
+        height={size + 2}
+        className="gold-star shrink-0"
+        style={{ fill: "var(--color-gold)" }}
+      >
+        <path d="M12 1.5 14.35 9.65 22.5 12 14.35 14.35 12 22.5 9.65 14.35 1.5 12 9.65 9.65Z" />
+      </svg>
+    );
+  }
+
   if (!mark) {
     return (
       <span
         aria-hidden
-        className={`inline-flex shrink-0 items-center justify-center rounded-[3px] font-mono font-medium ${
-          gold ? "gold-glow bg-gold-soft text-gold" : "bg-accent-soft text-accent"
-        }`}
+        className="inline-flex shrink-0 items-center justify-center rounded-[3px] bg-accent-soft font-mono font-medium text-accent"
         style={{ width: size, height: size, fontSize: Math.round(size * 0.6) }}
       >
         {name.charAt(0).toUpperCase()}
@@ -70,8 +87,8 @@ export function BrandMark({
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      className={`shrink-0 ${gold ? "gold-glow rounded-[3px]" : ""}`}
-      style={{ fill: gold ? "var(--color-gold)" : legibleOnWhite(mark.hex) }}
+      className="shrink-0"
+      style={{ fill: legibleOnWhite(mark.hex) }}
     >
       <path d={mark.path} />
     </svg>

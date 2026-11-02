@@ -75,6 +75,16 @@ body {
     0 2px 14px rgba(169, 122, 22, 0.45);
 }
 
+/* The AI sparkle. drop-shadow rather than box-shadow because the halo has to
+   follow the star's points — a box-shadow would ring its square bounding box
+   and give the glyph a faint rectangle around it. Two shadows: a tight core so
+   the shape stays crisp, and a wider soft cast for the actual glow. */
+.gold-star {
+  filter:
+    drop-shadow(0 0 1.5px rgba(169, 122, 22, 0.55))
+    drop-shadow(0 0 6px rgba(201, 150, 34, 0.75));
+}
+
 
 @media (prefers-reduced-motion: reduce) {
   *,
