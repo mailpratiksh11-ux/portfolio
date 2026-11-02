@@ -1,98 +1,83 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { nav, site } from "@/lib/data";
 
-const links = [
-  { href: "#help", label: "How I can help" },
-  { href: "#services", label: "Services" },
-  { href: "#work", label: "Work" },
-  { href: "#experience", label: "Experience" },
-  { href: "#faq", label: "FAQ" },
-];
-
+/**
+ * Sticky header with an active-section indicator.
+ *
+ * The indicator is driven by IntersectionObserver rather than scroll offsets:
+ * it reports which section is actually in view instead of recomputing
+ * positions on every scroll event, so it stays correct when sections change
+ * height at different breakpoints.
+ */
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState<string>("");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const ids = nav.map((n) => n.href.slice(1));
+    const nodes = ids
+      .map((id) => document.getElementById(id))
+      .filter((n): n is HTMLElement => Boolean(n));
+    if (!nodes.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        // The topmost intersecting section wins, so scrolling through a tall
+        // section does not hand the indicator to the one below it early.
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-96px 0px -55% 0px", threshold: 0 },
+    );
+
+    nodes.forEach((n) => io.observe(n));
+    return () => io.disconnect();
   }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled ? "border-b border-white/5 bg-base/85 backdrop-blur-md" : "bg-transparent"
-      }`}
-    >
-      <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
-        <Link href="#" className="flex items-baseline gap-2 text-[15px] font-semibold tracking-tight text-zinc-100">
-          Pratik Sharma
-          <span className="hidden font-mono text-xs font-normal text-zinc-500 sm:inline">
-            / full-stack developer
+    <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-md">
+      <div className="mx-auto flex h-[68px] max-w-[1200px] items-center justify-between px-6 md:px-10">
+        <a href="#top" className="group flex shrink-0 items-baseline gap-2.5">
+          {/* Without nowrap this breaks to two lines at 390px and shoves the
+              nav into the gutter. */}
+          <span className="whitespace-nowrap font-display text-[15px] font-semibold tracking-[-0.01em] text-ink">
+            {site.name}
           </span>
-        </Link>
+          <span className="hidden font-mono text-[12px] text-ink-3 sm:inline">
+            {site.role.toLowerCase()}
+          </span>
+        </a>
 
-        <ul className="hidden items-center gap-6 md:flex">
-          {links.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                className="text-sm text-zinc-400 transition-colors duration-150 hover:text-zinc-100"
-              >
-                {l.label}
-              </a>
-            </li>
-          ))}
-          <li>
-            <a
-              href="#contact"
-              className="rounded-lg bg-violet-500 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-violet-400"
-            >
-              Contact
-            </a>
-          </li>
-        </ul>
-
-        <button
-          className="grid size-9 place-items-center text-zinc-300 md:hidden"
-          onClick={() => setOpen(!open)}
-          aria-label={open ? "Close menu" : "Open menu"}
-        >
-          {open ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
-      </nav>
-
-      {open && (
-        <div className="border-b border-white/5 bg-base/95 backdrop-blur-md md:hidden">
-          <ul className="mx-auto max-w-6xl space-y-1 px-6 py-4">
-            {links.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-md px-2 py-2.5 text-sm text-zinc-300 hover:bg-white/5 hover:text-white"
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))}
-            <li className="pt-2">
-              <a
-                href="#contact"
-                onClick={() => setOpen(false)}
-                className="block rounded-lg bg-violet-500 px-4 py-2.5 text-center text-sm font-medium text-white"
-              >
-                Contact
-              </a>
-            </li>
+        <nav aria-label="Sections">
+          <ul className="flex items-center gap-1 sm:gap-2">
+            {nav.map((item) => {
+              const isActive = active === item.href.slice(1);
+              return (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    aria-current={isActive ? "true" : undefined}
+                    className={`relative block whitespace-nowrap px-1.5 py-2 text-[13px] transition-colors sm:px-3 sm:text-[14px] ${
+                      isActive ? "text-ink" : "text-ink-2 hover:text-ink"
+                    }`}
+                  >
+                    {item.label}
+                    <span
+                      aria-hidden
+                      className={`absolute inset-x-1.5 -bottom-px h-px bg-accent transition-opacity sm:inset-x-3 ${
+                        isActive ? "opacity-100" : "opacity-0"
+                      }`}
+                    />
+                  </a>
+                </li>
+              );
+            })}
           </ul>
-        </div>
-      )}
+        </nav>
+      </div>
     </header>
   );
 }

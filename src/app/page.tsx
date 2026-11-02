@@ -3,13 +3,11 @@ import { Navbar } from "@/components/Navbar";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 import { Experience } from "@/components/sections/Experience";
-import { FAQ } from "@/components/sections/FAQ";
 import { Hero } from "@/components/sections/Hero";
-import { HowICanHelp } from "@/components/sections/HowICanHelp";
-import { Process } from "@/components/sections/Process";
+import { Highlights } from "@/components/sections/Highlights";
+import { Problems } from "@/components/sections/Problems";
 import { Projects } from "@/components/sections/Projects";
-import { Services } from "@/components/sections/Services";
-import { TechStack } from "@/components/sections/TechStack";
+import { Stack } from "@/components/sections/Stack";
 
 export default function Home() {
   return (
@@ -17,14 +15,12 @@ export default function Home() {
       <Navbar />
       <main className="flex-1">
         <Hero />
-        <HowICanHelp />
-        <Services />
+        <Highlights />
         <Projects />
-        <About />
         <Experience />
-        <TechStack />
-        <Process />
-        <FAQ />
+        <Problems />
+        <Stack />
+        <About />
         <Contact />
       </main>
       <Footer />

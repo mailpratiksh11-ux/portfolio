@@ -1,36 +1,92 @@
 @import "tailwindcss";
 
 @theme {
-  --color-base: #0a0a0c;
-  --color-line: rgba(255, 255, 255, 0.08);
+  --color-paper: #ffffff;
+  --color-sunk: #f7f8fa;
+  --color-ink: #17191c;
+  --color-ink-2: #707781;
+  --color-ink-3: #9aa0a9;
+  --color-line: #e8eaed;
+  --color-accent: #3867e8;
+  --color-accent-soft: #eef3ff;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+  --font-display: var(--font-grotesk), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 88px;
+  /* Clears the sticky header when jumping to a section. */
+  scroll-padding-top: 96px;
 }
 
 body {
-  background-color: var(--color-base);
-  color: #d4d4d8;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
-  color: #fafafa;
+  background: var(--color-accent-soft);
+  color: var(--color-ink);
+}
+
+/* Keyboard focus must stay visible. Mouse clicks don't trigger :focus-visible,
+   so this costs nothing to pointer users and is the only way the page is
+   navigable without one. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* The one orchestrated moment: the hero settles into place on load. Anything
+   below the fold is static — scattered scroll reveals on every section are the
+   generic default and add nothing a reader asked for. */
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.settle {
+  animation: settle 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Hero queue schematic. --w is set per row; `both` means a reduced-motion
+   visitor, whose duration is collapsed to almost nothing below, still ends at
+   the final width instead of looking at an empty diagram. */
+@keyframes queue-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--w);
+  }
+}
+
+.queue-fill {
+  width: var(--w);
+  animation: queue-fill 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
 }
