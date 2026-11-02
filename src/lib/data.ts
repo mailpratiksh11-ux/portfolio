@@ -99,12 +99,10 @@ export const projects = [
       "A multi-tenant email automation platform that helps people run personalised cold email campaigns from their own Gmail account.",
     overview:
       "Beacon AI pairs campaign automation with AI-assisted writing. People connect their own Gmail, import a list, and send personalised sequences that go out from their address rather than a shared relay — so replies land in their inbox and their own domain carries the sending reputation.",
-    shots: [
-      { file: "/work/beacon-dashboard.png", label: "Campaign dashboard" },
-      { file: "/work/beacon-compose.png", label: "Campaign composer" },
-      { file: "/work/beacon-ai-assistant.png", label: "AI writing assistant" },
-      { file: "/work/beacon-progress.png", label: "Live send progress" },
-    ] satisfies Shot[],
+    // One real screenshot of the live product. The dashboard, composer and
+    // assistant all sit behind sign-in, so they cannot be captured without an
+    // account — add them here when you have them and they render automatically.
+    shots: [{ file: "/work/beacon-landing.png", label: "beacon.heypratikk.com" }] satisfies Shot[],
     story: [
       {
         n: "01",
@@ -193,10 +191,16 @@ export const projects = [
       "A full-stack e-learning platform built to support course creation and video-based learning.",
     overview:
       "Instructors create courses and upload lesson video; students browse the catalogue and watch lessons back in the browser. Video is the awkward part of a platform like this — files are large, and a document database is not built to hold them whole — so storage goes through GridFS rather than the filesystem.",
-    shots: [
-      { file: "/work/skillsup-courses.png", label: "Course listing" },
-      { file: "/work/skillsup-player.png", label: "Video player" },
-    ] satisfies Shot[],
+    // Not deployed anywhere, so there is nothing live to capture. The data
+    // path below stands in — it is what the project actually was, and it beats
+    // two empty frames waiting for screenshots that may never exist.
+    shots: [] satisfies Shot[],
+    stackLayers: [
+      { tier: "Frontend", detail: "Angular" },
+      { tier: "Backend API", detail: "Node.js + Express" },
+      { tier: "Storage", detail: "MongoDB + GridFS" },
+    ],
+    flows: [{ title: "Video delivery", nodes: ["Upload", "GridFS chunks", "Stream", "Player"] }],
     story: [
       {
         n: "01",

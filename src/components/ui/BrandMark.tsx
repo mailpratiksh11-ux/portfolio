@@ -1,27 +1,53 @@
 import { BRAND_MARKS } from "@/lib/brandMarks";
 
 /**
- * A technology's brand mark, drawn in ink rather than its brand colour.
+ * Darken a brand colour that would be illegible on white.
  *
- * Twenty-four logos at full saturation turn a disciplined page into a sticker
- * sheet, and the section is meant to read as one technical ecosystem rather
- * than a sponsor wall. The marks still do the recognition work — silhouettes
- * are what people actually recognise at 16px.
+ * Several official brand hexes are very light — JavaScript's #F7DF1E is the
+ * obvious one — and rendered at 15px on a white background they read as a
+ * smudge. Blending toward black past a luminance threshold keeps the colour
+ * recognisably the brand's while leaving the mark actually visible.
  *
- * Anything without a mark (Azure, Groq, REST, BullMQ, GridFS, Webhooks) gets a
- * hollow square of the same size, so the column stays aligned and a missing
- * logo does not read as a broken image.
+ * Only the light end is touched; dark brand colours are used exactly as
+ * published.
  */
-export function BrandMark({ name, size = 15 }: { name: string; size?: number }) {
+function legibleOnWhite(hex: string): string {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+
+  // Rec. 709 luma, which tracks perceived brightness far better than an average.
+  const luma = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  if (luma < 0.62) return hex;
+
+  const mix = luma > 0.8 ? 0.52 : 0.34;
+  const d = (c: number) => Math.round(c * (1 - mix));
+  return `rgb(${d(r)}, ${d(g)}, ${d(b)})`;
+}
+
+/**
+ * A technology's brand mark in its own colour, or a monogram when the set has
+ * no icon for it.
+ *
+ * Azure, Groq and Webhooks have no mark — Microsoft icons were withdrawn from
+ * Simple Icons over trademark policy — and REST, BullMQ, GridFS, LLM
+ * integration and prompt design are concepts rather than products. They get an
+ * initial in a tinted tile, which sits at the same size and weight as a logo
+ * so the column reads as one list rather than a list with holes in it.
+ */
+export function BrandMark({ name, size = 16 }: { name: string; size?: number }) {
   const mark = BRAND_MARKS[name];
 
   if (!mark) {
     return (
       <span
         aria-hidden
-        className="inline-block shrink-0 rounded-[2px] border border-ink-3/50"
-        style={{ width: size - 3, height: size - 3 }}
-      />
+        className="inline-flex shrink-0 items-center justify-center rounded-[3px] bg-accent-soft font-mono font-medium text-accent"
+        style={{ width: size, height: size, fontSize: Math.round(size * 0.6) }}
+      >
+        {name.charAt(0).toUpperCase()}
+      </span>
     );
   }
 
@@ -33,7 +59,8 @@ export function BrandMark({ name, size = 15 }: { name: string; size?: number }) 
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      className="shrink-0 fill-ink-2 transition-colors"
+      className="shrink-0"
+      style={{ fill: legibleOnWhite(mark.hex) }}
     >
       <path d={mark.path} />
     </svg>

@@ -113,9 +113,11 @@ function FeaturedProject({ p }: { p: Project }) {
         <p className="mt-6 max-w-[64ch] text-[18px] leading-[1.6] text-ink-2">{p.tagline}</p>
       </Reveal>
 
-      <Reveal delay={80} className="mt-10">
-        <ProjectShot shot={hero} aspect="16 / 9" priority />
-      </Reveal>
+      {hero ? (
+        <Reveal delay={80} className="mt-10">
+          <ProjectShot shot={hero} aspect="16 / 9" priority />
+        </Reveal>
+      ) : null}
 
       <Reveal delay={60} className="mt-12">
         <p className="max-w-[70ch] text-[17px] leading-[1.7] text-ink-2">{p.overview}</p>
@@ -140,11 +142,13 @@ function FeaturedProject({ p }: { p: Project }) {
         ) : null}
       </Reveal>
 
-      <Reveal delay={60} className="mt-10 grid gap-6 sm:grid-cols-2">
-        {rest.slice(0, 2).map((shot) => (
-          <ProjectShot key={shot.file} shot={shot} aspect="16 / 10" />
-        ))}
-      </Reveal>
+      {rest.length ? (
+        <Reveal delay={60} className="mt-10 grid gap-6 sm:grid-cols-2">
+          {rest.slice(0, 2).map((shot) => (
+            <ProjectShot key={shot.file} shot={shot} aspect="16 / 10" />
+          ))}
+        </Reveal>
+      ) : null}
 
       <Reveal className="mt-14 flex flex-col gap-8 border-t border-line pt-8 md:flex-row md:items-end md:justify-between">
         <TechList items={p.tech} />
@@ -181,6 +185,13 @@ function SecondaryProject({ p }: { p: Project }) {
           {p.shots.map((shot) => (
             <ProjectShot key={shot.file} shot={shot} aspect="16 / 10" />
           ))}
+
+          {/* With nothing deployed to screenshot, the data path stands in. It
+              describes the work rather than waiting for an image that may
+              never exist. */}
+          {!p.shots.length && p.stackLayers && p.flows ? (
+            <ArchitectureDiagram layers={p.stackLayers} flows={p.flows} />
+          ) : null}
 
           <div className="space-y-7 border-t border-line pt-7">
             <TechList items={p.tech} />
