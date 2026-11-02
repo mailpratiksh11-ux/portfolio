@@ -94,6 +94,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       lang="en"
       className={`${inter.variable} ${grotesk.variable} ${plexMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* Reveal elements start transparent and are shown by an observer.
+            Without JavaScript that observer never runs, so force them visible
+            rather than serving a page of empty space. */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
       <body className="flex min-h-full flex-col bg-paper text-ink">
         <script
           type="application/ld+json"

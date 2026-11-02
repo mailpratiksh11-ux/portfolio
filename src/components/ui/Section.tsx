@@ -37,7 +37,12 @@ export function Section({ id, index, rail, title, lede, tint, children }: Props)
             </span>
           </div>
 
-          <div>
+          {/* min-w-0 is load-bearing. A grid track sized `auto` takes its
+              width from the widest max-content inside it, so one horizontally
+              scrollable diagram was stretching the whole column past the
+              viewport and pushing every heading off the right edge on a
+              phone. */}
+          <div className="min-w-0">
             <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-[1.12] tracking-[-0.02em] text-ink">
               {title}
             </h2>

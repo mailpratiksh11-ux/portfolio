@@ -1,150 +1,215 @@
 import { projects } from "@/lib/data";
 import { Section } from "@/components/ui/Section";
+import { Reveal } from "@/components/ui/Reveal";
+import { ProjectShot } from "@/components/ui/ProjectShot";
+import { ArchitectureDiagram } from "@/components/ui/ArchitectureDiagram";
 
-/**
- * Each project gets an architecture strip instead of a screenshot.
- *
- * There are no product screenshots in the repository, and a stock mockup or an
- * invented dashboard would be the most dishonest thing on the page. The data
- * path is the part worth showing anyway — it is what the work actually was,
- * and it survives a redesign of the UI it describes.
- */
-const FLOWS: Record<string, string[]> = {
-  "beacon-ai": ["Browser", "Express API", "BullMQ · Redis", "Gmail API", "Recipient"],
-  "skills-up": ["Upload", "GridFS chunks", "Range request", "Player"],
-};
+type Project = (typeof projects)[number];
 
-function ArchitectureStrip({ slug }: { slug: string }) {
-  const nodes = FLOWS[slug];
-  if (!nodes) return null;
-
+function ProjectLinks({ github, live }: { github: string; live?: string }) {
   return (
-    <figure className="rounded-lg border border-line bg-sunk p-5 sm:p-6">
-      <figcaption className="mb-5 font-mono text-[12px] text-ink-3">data path</figcaption>
-      {/* Vertical, not horizontal. Laid out in a row these wrapped into
-          disconnected lines with connectors dangling off the end, which read as
-          three separate groups rather than one path. A column cannot wrap. */}
-      <ol>
-        {nodes.map((node, i) => (
-          <li key={node} className="relative flex items-center gap-3.5 pb-4 last:pb-0">
-            {i < nodes.length - 1 ? (
-              <span aria-hidden className="absolute left-[5px] top-3 h-full w-px bg-ink-3/45" />
-            ) : null}
-            <span
-              aria-hidden
-              className={`relative z-10 h-[11px] w-[11px] shrink-0 rounded-full border bg-paper ${
-                i === 0 || i === nodes.length - 1 ? "border-accent" : "border-ink-3"
-              }`}
-            />
-            <span className="font-mono text-[12.5px] leading-none text-ink">{node}</span>
+    <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+      {live ? (
+        <a
+          href={live}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="rounded-md bg-accent px-5 py-2.5 text-[14.5px] font-medium text-paper transition-colors hover:bg-[#2d55c9]"
+        >
+          Visit the product
+        </a>
+      ) : null}
+      <a
+        href={github}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="font-mono text-[13.5px] text-ink underline decoration-line decoration-1 underline-offset-[6px] transition-colors hover:text-accent hover:decoration-accent"
+      >
+        View source
+      </a>
+    </div>
+  );
+}
+
+function TechList({ items }: { items: string[] }) {
+  return (
+    <div>
+      <h4 className="font-mono text-[12px] text-ink-3">Built with</h4>
+      {/* A list separated by rules rather than a field of pills — eleven badges
+          in a row stop being readable and start being texture.
+
+          flex-wrap, not inline text. Each item is nowrap so "Gmail API" cannot
+          split across lines, but JSX strips the whitespace between sibling
+          elements, so an inline run of nowrap spans has no break opportunity
+          at all and overflows the viewport as one unbreakable line. The flex
+          container puts the break opportunities back between items. */}
+      <ul className="mt-3 flex flex-wrap items-baseline gap-y-1 font-mono text-[13px] text-ink-2">
+        {items.map((t, i) => (
+          <li key={t} className="whitespace-nowrap">
+            <span className="text-ink">{t}</span>
+            {i < items.length - 1 ? <span className="px-2 text-ink-3">/</span> : null}
           </li>
         ))}
-      </ol>
-    </figure>
+      </ul>
+    </div>
+  );
+}
+
+function StoryBlock({
+  n,
+  title,
+  points,
+  compact = false,
+}: {
+  n: string;
+  title: string;
+  points: string[];
+  compact?: boolean;
+}) {
+  return (
+    <div className="border-t border-line pt-5">
+      <div className="flex items-baseline gap-3">
+        <span className="font-mono text-[12px] text-accent">{n}</span>
+        <h4
+          className={`font-display font-semibold tracking-[-0.01em] text-ink ${
+            compact ? "text-[16px]" : "text-[17px]"
+          }`}
+        >
+          {title}
+        </h4>
+      </div>
+      <ul className="mt-3 space-y-2">
+        {points.map((p) => (
+          <li key={p} className="flex gap-2.5 text-[14.5px] leading-relaxed text-ink-2">
+            <span aria-hidden className="mt-[10px] h-px w-2.5 shrink-0 bg-ink-3" />
+            <span className="max-w-[52ch]">{p}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/** Beacon AI: full-bleed hero shot, five story blocks, architecture. */
+function FeaturedProject({ p }: { p: Project }) {
+  const [hero, ...rest] = p.shots;
+
+  return (
+    <article className="border-t-2 border-ink pt-10">
+      <Reveal>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="rounded bg-accent-soft px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-accent">
+            Featured project
+          </span>
+          <span className="font-mono text-[12px] text-ink-3">
+            {p.year} · {p.status.toLowerCase()}
+          </span>
+        </div>
+
+        <h3 className="mt-6 font-display text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-ink">
+          {p.name}
+        </h3>
+        <p className="mt-2.5 font-mono text-[14px] text-ink-2">{p.category}</p>
+        <p className="mt-6 max-w-[64ch] text-[18px] leading-[1.6] text-ink-2">{p.tagline}</p>
+      </Reveal>
+
+      <Reveal delay={80} className="mt-10">
+        <ProjectShot shot={hero} aspect="16 / 9" priority />
+      </Reveal>
+
+      <Reveal delay={60} className="mt-12">
+        <p className="max-w-[70ch] text-[17px] leading-[1.7] text-ink-2">{p.overview}</p>
+      </Reveal>
+
+      <Reveal className="mt-16">
+        <h4 className="font-mono text-[12px] text-ink-3">How it is built</h4>
+        <div className="mt-6 grid gap-x-14 gap-y-9 md:grid-cols-2">
+          {p.story?.map((s) => (
+            <StoryBlock key={s.n} n={s.n} title={s.title} points={s.points} />
+          ))}
+        </div>
+      </Reveal>
+
+      {/* The diagram gets the full column. Beside the screenshots it was about
+          440px wide, which forced a five-node chain to scroll on a 1440px
+          desktop — scrolling is meant to be the phone fallback, not the
+          default. */}
+      <Reveal className="mt-16">
+        {p.stackLayers && p.flows ? (
+          <ArchitectureDiagram layers={p.stackLayers} flows={p.flows} />
+        ) : null}
+      </Reveal>
+
+      <Reveal delay={60} className="mt-10 grid gap-6 sm:grid-cols-2">
+        {rest.slice(0, 2).map((shot) => (
+          <ProjectShot key={shot.file} shot={shot} aspect="16 / 10" />
+        ))}
+      </Reveal>
+
+      <Reveal className="mt-14 flex flex-col gap-8 border-t border-line pt-8 md:flex-row md:items-end md:justify-between">
+        <TechList items={p.tech} />
+        <ProjectLinks github={p.github} live={p.live} />
+      </Reveal>
+    </article>
+  );
+}
+
+/** Skills Up: alternating two-column, text left and screens right. */
+function SecondaryProject({ p }: { p: Project }) {
+  return (
+    <article className="border-t border-line pt-10">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:gap-16">
+        <Reveal>
+          <p className="font-mono text-[12px] text-ink-3">
+            {p.year} · {p.status.toLowerCase()}
+          </p>
+          <h3 className="mt-4 font-display text-[clamp(1.6rem,3.4vw,2.25rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-ink">
+            {p.name}
+          </h3>
+          <p className="mt-2 font-mono text-[13.5px] text-ink-2">{p.category}</p>
+          <p className="mt-5 max-w-[56ch] text-[16.5px] leading-[1.65] text-ink-2">{p.tagline}</p>
+          <p className="mt-4 max-w-[56ch] text-[15.5px] leading-[1.7] text-ink-2">{p.overview}</p>
+
+          <div className="mt-9 space-y-7">
+            {p.story?.map((s) => (
+              <StoryBlock key={s.n} n={s.n} title={s.title} points={s.points} compact />
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal delay={80} className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          {p.shots.map((shot) => (
+            <ProjectShot key={shot.file} shot={shot} aspect="16 / 10" />
+          ))}
+
+          <div className="space-y-7 border-t border-line pt-7">
+            <TechList items={p.tech} />
+            <ProjectLinks github={p.github} live={p.live} />
+          </div>
+        </Reveal>
+      </div>
+    </article>
   );
 }
 
 export function Projects() {
+  const featured = projects.filter((p) => p.featured);
+  const others = projects.filter((p) => !p.featured);
+
   return (
     <Section
       id="work"
       index="02"
-      rail="work"
-      title="Selected work."
-      lede="Two products I built end to end, and what was actually hard about each."
+      rail="selected work"
+      title="Building products. Solving engineering problems."
+      lede="Products and engineering projects spanning full-stack development, backend architecture, integrations and AI-powered experiences."
     >
-      <div className="space-y-20 md:space-y-28">
-        {projects.map((p, i) => (
-          <article key={p.slug} className="border-t border-line pt-10">
-            <header className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-              <h3 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.02em] text-ink">
-                {p.name}
-              </h3>
-              <span className="font-mono text-[13px] text-ink-2">{p.kind}</span>
-              <span className="ml-auto flex items-center gap-3 font-mono text-[12px] text-ink-3">
-                <span>{p.year}</span>
-                <span
-                  className={`rounded px-2 py-0.5 ${
-                    p.status === "Live" ? "bg-accent-soft text-accent" : "bg-sunk text-ink-2"
-                  }`}
-                >
-                  {p.status.toLowerCase()}
-                </span>
-              </span>
-            </header>
-
-            <p className="mt-5 max-w-[68ch] text-[17px] leading-relaxed text-ink-2">{p.intro}</p>
-
-            {/* Alternating composition: the strip leads on the second project,
-                so two case studies in a row do not read as a template. */}
-            <div
-              className={`mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-14 ${
-                i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
-              }`}
-            >
-              <div className="space-y-7">
-                <div>
-                  <h4 className="font-mono text-[12px] text-ink-3">The problem</h4>
-                  <p className="mt-2 max-w-[62ch] text-[16px] leading-relaxed text-ink-2">
-                    {p.problem}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-mono text-[12px] text-ink-3">What I did</h4>
-                  <p className="mt-2 max-w-[62ch] text-[16px] leading-relaxed text-ink-2">
-                    {p.contribution}
-                  </p>
-                  <ul className="mt-4 space-y-2.5">
-                    {p.built.map((b) => (
-                      <li key={b} className="flex gap-3 text-[15px] leading-relaxed text-ink-2">
-                        <span aria-hidden className="mt-[10px] h-px w-3 shrink-0 bg-ink-3" />
-                        <span className="max-w-[58ch]">{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <ArchitectureStrip slug={p.slug} />
-
-                <div>
-                  <h4 className="font-mono text-[12px] text-ink-3">Built with</h4>
-                  <ul className="mt-3 flex flex-wrap gap-1.5">
-                    {p.tech.map((t) => (
-                      <li
-                        key={t}
-                        className="rounded border border-line px-2.5 py-1 font-mono text-[12px] text-ink-2"
-                      >
-                        {t}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="flex flex-wrap gap-5 font-mono text-[13px]">
-                  <a
-                    href={p.github}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="text-ink underline decoration-line underline-offset-[5px] transition-colors hover:text-accent hover:decoration-accent"
-                  >
-                    Source
-                  </a>
-                  {p.live ? (
-                    <a
-                      href={p.live}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="text-accent underline decoration-accent/40 underline-offset-[5px] transition-colors hover:decoration-accent"
-                    >
-                      Visit the product
-                    </a>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          </article>
+      <div className="space-y-24 md:space-y-32">
+        {featured.map((p) => (
+          <FeaturedProject key={p.slug} p={p} />
+        ))}
+        {others.map((p) => (
+          <SecondaryProject key={p.slug} p={p} />
         ))}
       </div>
     </Section>

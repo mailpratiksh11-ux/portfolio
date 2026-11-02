@@ -51,49 +51,145 @@ export const highlights = [
   },
 ];
 
+/**
+ * Screenshots.
+ *
+ * `file` is a path under /public. Drop a real capture at that path and it
+ * replaces the placeholder with no code change. Until then the component
+ * renders a labelled frame naming the screen it is waiting for, which is
+ * honest about being unfinished rather than filling the space with a stock
+ * mockup pretending to be the product.
+ */
+export type Shot = { file: string; label: string };
+
 export const projects = [
   {
     slug: "beacon-ai",
     name: "Beacon AI",
-    kind: "Email automation platform",
+    category: "AI-powered email automation platform",
     year: "2026",
     status: "Live",
-    intro:
-      "A multi-tenant SaaS for cold outreach. People sign in with Google and send personalised campaigns from their own mailbox, so replies land where they expect and their own domain carries the reputation.",
-    problem:
-      "Outreach tools send through a shared relay. Your mail inherits someone else's sender reputation, and replies come back to an address you don't own.",
-    contribution:
-      "Built end to end — the Angular front end, the Express API, the queue-backed send pipeline, and the deployment that runs it.",
-    built: [
-      "Google OAuth 2.0 sign-in, with every record scoped to its own tenant",
-      "Sends through the user's own mailbox via the Gmail API",
-      "Layered Express API — route, controller, service, model — on MongoDB with JWT auth and one response envelope",
-      "BullMQ and Redis send pipeline with a resumable worker, so a restart mid-campaign picks up where it stopped",
-      "Live progress over Socket.IO that survives navigation and refresh",
-      "An LLM writing assistant on Groq and Qwen3-32B: drafts from a one-line brief, subject lines, and rewrites",
+    featured: true,
+    tagline:
+      "A multi-tenant email automation platform that helps people run personalised cold email campaigns from their own Gmail account.",
+    overview:
+      "Beacon AI pairs campaign automation with AI-assisted writing. People connect their own Gmail, import a list, and send personalised sequences that go out from their address rather than a shared relay — so replies land in their inbox and their own domain carries the sending reputation.",
+    shots: [
+      { file: "/work/beacon-dashboard.png", label: "Campaign dashboard" },
+      { file: "/work/beacon-compose.png", label: "Campaign composer" },
+      { file: "/work/beacon-ai-assistant.png", label: "AI writing assistant" },
+      { file: "/work/beacon-progress.png", label: "Live send progress" },
+    ] satisfies Shot[],
+    story: [
+      {
+        n: "01",
+        title: "Multi-tenant authentication",
+        points: [
+          "Google OAuth 2.0 sign-in",
+          "Sends through each user's own Gmail account via the Gmail API",
+          "User-scoped data, so one tenant's campaigns are never reachable from another",
+          "JWT authentication on every protected endpoint",
+        ],
+      },
+      {
+        n: "02",
+        title: "Background email processing",
+        points: [
+          "Asynchronous send pipeline on BullMQ and Redis",
+          "Resumable workers, so a restart mid-campaign continues rather than starting over",
+          "Long-running campaigns kept off the request path entirely",
+        ],
+      },
+      {
+        n: "03",
+        title: "Real-time campaign monitoring",
+        points: [
+          "Live progress streamed over Socket.IO",
+          "Progress survives navigation and refresh, because the server owns the state",
+        ],
+      },
+      {
+        n: "04",
+        title: "AI writing assistant",
+        points: [
+          "Groq and Qwen3-32B integration",
+          "Generates a complete email from a one-line brief",
+          "Suggests subject lines",
+          "Rewrites an existing draft",
+        ],
+      },
+      {
+        n: "05",
+        title: "Backend architecture",
+        points: [
+          "Layered Express API: routes, controllers, services, models",
+          "MongoDB with Mongoose",
+          "Centralised error handling and one consistent response envelope",
+        ],
+      },
     ],
-    tech: ["Angular", "TypeScript", "Node.js", "Express", "MongoDB", "Redis", "BullMQ", "Socket.IO", "Gmail API", "Groq"],
+    stackLayers: [
+      { tier: "Frontend", detail: "Angular + TypeScript" },
+      { tier: "Backend API", detail: "Node.js + Express + JWT" },
+      { tier: "Database", detail: "MongoDB + Mongoose" },
+    ],
+    flows: [
+      {
+        title: "Background email processing",
+        nodes: ["Express API", "BullMQ", "Redis", "Worker", "Gmail API"],
+      },
+      { title: "Real-time updates", nodes: ["Worker", "Socket.IO", "Angular"] },
+      { title: "AI integration", nodes: ["Angular", "Express API", "Groq / Qwen3-32B"] },
+    ],
+    tech: [
+      "Angular",
+      "TypeScript",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Redis",
+      "BullMQ",
+      "Socket.IO",
+      "Gmail API",
+      "Google OAuth 2.0",
+      "Groq / Qwen3-32B",
+    ],
     github: "https://github.com/mailpratiksh11-ux/Beacon-AI",
     live: "https://beacon.heypratikk.com",
   },
   {
     slug: "skills-up",
     name: "Skills Up",
-    kind: "E-learning platform",
+    category: "Full-stack e-learning platform",
     year: "2024",
     status: "Source available",
-    intro:
-      "A full-stack learning platform where instructors publish courses and students watch them back without the video stalling.",
-    problem:
-      "Video is the hard part of a course platform. Storing whole files in a document database doesn't scale, and serving them without range support makes seeking unusable.",
-    contribution: "Built end to end, with GridFS chunked storage behind the streaming endpoints.",
-    built: [
-      "Course creation and management",
-      "GridFS chunked video storage and retrieval",
-      "Range-request streaming, so seeking works mid-video",
-      "Authentication and user profiles",
+    featured: false,
+    tagline:
+      "A full-stack e-learning platform built to support course creation and video-based learning.",
+    overview:
+      "Instructors create courses and upload lesson video; students browse the catalogue and watch lessons back in the browser. Video is the awkward part of a platform like this — files are large, and a document database is not built to hold them whole — so storage goes through GridFS rather than the filesystem.",
+    shots: [
+      { file: "/work/skillsup-courses.png", label: "Course listing" },
+      { file: "/work/skillsup-player.png", label: "Video player" },
+    ] satisfies Shot[],
+    story: [
+      {
+        n: "01",
+        title: "Course management",
+        points: ["Full-stack e-learning application", "Course creation workflows"],
+      },
+      {
+        n: "02",
+        title: "Video storage",
+        points: ["MongoDB GridFS for storing and retrieving video content"],
+      },
+      {
+        n: "03",
+        title: "Video delivery",
+        points: ["Video streaming to support in-browser playback"],
+      },
     ],
-    tech: ["Angular", "Node.js", "Express", "MongoDB", "GridFS"],
+    tech: ["MongoDB", "Express.js", "Angular", "Node.js", "GridFS"],
     github: "https://github.com/mailpratiksh11-ux",
     live: "",
   },
