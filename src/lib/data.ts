@@ -190,16 +190,17 @@ export const projects = [
       "A full-stack e-learning platform built to support course creation and video-based learning.",
     overview:
       "Instructors create courses and upload lesson video; students browse the catalogue and watch lessons back in the browser. Video is the awkward part of a platform like this — files are large, and a document database is not built to hold them whole — so storage goes through GridFS rather than the filesystem.",
-    // Not deployed anywhere, so there is nothing live to capture. The data
-    // path below stands in — it is what the project actually was, and it beats
-    // two empty frames waiting for screenshots that may never exist.
-    shots: [] satisfies Shot[],
+    // Not deployed anywhere, so there is nothing live to capture. This is an
+    // illustration, not a screenshot — a designed cover showing how the video
+    // actually moves, rather than a mocked-up interface pretending to be the
+    // product. Source: design/skillsup-cover.html.
+    shots: [{ file: "/work/skillsup-cover.png", label: "Course platform — illustration" }] satisfies Shot[],
     stackLayers: [
       { tier: "Frontend", detail: "Angular" },
       { tier: "Backend API", detail: "Node.js + Express" },
       { tier: "Storage", detail: "MongoDB + GridFS" },
     ],
-    flows: [{ title: "Video delivery", nodes: ["Upload", "GridFS chunks", "Stream", "Player"] }],
+    flows: [{ title: "Video delivery", nodes: ["Upload", "GridFS", "Stream", "Player"] }],
     story: [
       {
         n: "01",

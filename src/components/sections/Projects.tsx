@@ -186,19 +186,21 @@ function SecondaryProject({ p }: { p: Project }) {
             <ProjectShot key={shot.file} shot={shot} aspect="16 / 10" />
           ))}
 
-          {/* With nothing deployed to screenshot, the data path stands in. It
-              describes the work rather than waiting for an image that may
-              never exist. */}
-          {!p.shots.length && p.stackLayers && p.flows ? (
-            <ArchitectureDiagram layers={p.stackLayers} flows={p.flows} />
-          ) : null}
-
           <div className="space-y-7 border-t border-line pt-7">
             <TechList items={p.tech} />
             <ProjectLinks github={p.github} live={p.live} />
           </div>
         </Reveal>
       </div>
+
+      {/* Full width, not in the right rail. A four-node chain does not fit a
+          ~335px column, and it was clipping "Player" behind a scrollbar on a
+          1440px desktop — the same mistake as Beacon's, in a narrower column. */}
+      {p.stackLayers && p.flows ? (
+        <Reveal className="mt-12">
+          <ArchitectureDiagram layers={p.stackLayers} flows={p.flows} />
+        </Reveal>
+      ) : null}
     </article>
   );
 }

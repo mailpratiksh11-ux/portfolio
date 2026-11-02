@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Source for /work/skillsup-cover.png. Rendered headless at 1200x750.
+         Kept in the repo so the cover can be regenerated or edited rather than
+         being an orphaned binary nobody can change. */
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        width: 1200px; height: 750px; background: #f7f8fa;
+        font-family: "IBM Plex Mono", monospace; color: #17191c;
+        display: flex; flex-direction: column; justify-content: center;
+        padding: 0 86px; gap: 46px;
+      }
+      .label { font-size: 15px; color: #9aa0a9; letter-spacing: .06em; }
+      h1 { font-family: "Space Grotesk", sans-serif; font-size: 58px; letter-spacing: -.025em; }
+      h1 + p { font-size: 17px; color: #707781; margin-top: 12px; }
+
+      .player {
+        position: relative; height: 212px; border-radius: 10px; background: #17191c;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .play {
+        width: 62px; height: 62px; border-radius: 999px; background: #3867e8;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .play::after {
+        content: ""; width: 0; height: 0; margin-left: 5px;
+        border-left: 19px solid #fff;
+        border-top: 12px solid transparent; border-bottom: 12px solid transparent;
+      }
+      .scrub {
+        position: absolute; left: 26px; right: 26px; bottom: 26px;
+        height: 5px; border-radius: 999px; background: rgba(255,255,255,.16);
+      }
+      .scrub span { display: block; width: 43%; height: 100%; border-radius: 999px; background: #3867e8; }
+
+      .chunks { display: flex; gap: 9px; align-items: flex-end; }
+      .chunks i {
+        display: block; flex: 1; border-radius: 4px; background: #dbe4fb;
+      }
+      .chunks i.on { background: #3867e8; }
+      .foot { display: flex; justify-content: space-between; font-size: 14px; color: #707781; }
+    </style>
+  </head>
+  <body>
+    <div>
+      <p class="label">COURSE PLATFORM</p>
+      <h1>Skills Up</h1>
+      <p>Course creation and video-based learning.</p>
+    </div>
+
+    <div class="player">
+      <div class="play"></div>
+      <div class="scrub"><span></span></div>
+    </div>
+
+    <div>
+      <div class="chunks">
+        <i class="on" style="height:30px"></i><i class="on" style="height:44px"></i>
+        <i class="on" style="height:22px"></i><i class="on" style="height:52px"></i>
+        <i class="on" style="height:34px"></i><i class="on" style="height:46px"></i>
+        <i style="height:26px"></i><i style="height:40px"></i><i style="height:30px"></i>
+        <i style="height:48px"></i><i style="height:24px"></i><i style="height:36px"></i>
+        <i style="height:42px"></i><i style="height:28px"></i><i style="height:50px"></i>
+        <i style="height:32px"></i><i style="height:38px"></i><i style="height:22px"></i>
+      </div>
+      <div class="foot" style="margin-top:16px">
+        <span>video stored as GridFS chunks</span>
+        <span>streamed back to the player</span>
+      </div>
+    </div>
+  </body>
+</html>
