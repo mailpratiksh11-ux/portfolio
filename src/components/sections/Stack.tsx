@@ -1,13 +1,13 @@
 import { stack } from "@/lib/data";
 import { Section } from "@/components/ui/Section";
+import { BrandMark } from "@/components/ui/BrandMark";
 
 /**
- * Grouped lists, no proficiency bars.
+ * Grouped lists with brand marks, and no proficiency bars.
  *
- * A bar claiming "Node.js 85%" is unfalsifiable and everyone reading it knows
- * that. The grouping is the only honest signal available: these are the things
- * that appear in the work above, arranged so a reader can scan for the one
- * they care about.
+ * A bar claiming "Node.js 85%" is unfalsifiable and every reader knows it.
+ * The grouping is the honest signal: these are the things that appear in the
+ * work above, arranged so someone can scan for the one they care about.
  */
 export function Stack() {
   return (
@@ -23,12 +23,15 @@ export function Stack() {
         {stack.map((group) => (
           <div key={group.group} className="border-t border-line pt-5">
             <dt className="font-mono text-[12px] text-ink-3">{group.group}</dt>
-            <dd className="mt-3 flex flex-wrap gap-x-3 gap-y-2">
-              {group.items.map((item) => (
-                <span key={item} className="text-[15px] text-ink">
-                  {item}
-                </span>
-              ))}
+            <dd className="mt-4">
+              <ul className="space-y-2.5">
+                {group.items.map((item) => (
+                  <li key={item} className="flex items-center gap-2.5">
+                    <BrandMark name={item} />
+                    <span className="text-[15px] leading-none text-ink">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </dd>
           </div>
         ))}
